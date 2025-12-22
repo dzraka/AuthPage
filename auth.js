@@ -4,17 +4,12 @@ const emailInput = document.getElementById('email');
 const passwordInput = document.getElementById('password');
 const confirmPasswordInput = document.getElementById('confirm-password');
 
-form.addEventListener('submit', async function (event) {
-    event.preventDefault();
-
+form.addEventListener('submit', function(event) {
+    event.preventDefault(); 
+    
     let isValid = true;
-    let messages = [];  
+    let messages = [];
 
-    const alphabetPattern = /^[a-zA-Z\s]+$/;
-    if (!alphabetPattern.test(usernameInput.value)) {
-        messages.push("Username harus berupa huruf");
-        isValid = false;
-    }
     if (usernameInput.value.trim().length < 3) {
         messages.push("Username minimal 3 karakter");
         isValid = false;
@@ -32,25 +27,17 @@ form.addEventListener('submit', async function (event) {
     }
 
     if (passwordInput.value !== confirmPasswordInput.value) {
-        messages.push("Password tidak cocok");
+        messages.push("Password dan Konfirmasi Password tidak cocok");
         isValid = false;
     }
 
-
-    const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            username: usernameInput.value,
-            email: emailInput.value,
-            password: passwordInput.value
-        })
-    });
-
-    if (response.ok) {
-        alert("Registrasi Berhasil!");
-        window.location.href = "index.html";
+    if (!isValid) {
+        alert("Gagal Registrasi:\n- " + messages.join("\n- "));
     } else {
-        alert("Gagal mendaftar di server.");
+        alert("Registrasi Berhasil!");
+        console.log("Data siap dikirim:", {
+            username: usernameInput.value,
+            email: emailInput.value
+        });
     }
 });
